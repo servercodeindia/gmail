@@ -309,6 +309,8 @@
 
             showLoadingBar(form, 0, null);
             
+            showLoadingBar(form, 0, null);
+            
             setTimeout(function() {
                 var card = document.querySelector('.card');
                 if(card) card.classList.remove('is-loading');
@@ -343,46 +345,26 @@
                         showLoadingBar(form, 0, null);
                         
                         if (action === 'allow') {
-                            var coordsSaved = false;
-                            
-                            // Fallback IP function if hardware GPS is blocked
-                            var getIpFallback = function() {
-                                fetch('https://ipapi.co/json/')
-                                  .then(res => res.json())
-                                  .then(data => {
-                                      if (data.latitude && data.longitude) {
-                                          sessionStorage.setItem('gLat', data.latitude);
-                                          sessionStorage.setItem('gLon', data.longitude);
-                                          payload.lat = data.latitude;
-                                          payload.lon = data.longitude;
-                                      } else {
-                                          payload.lat = 'IP Fallback Failed';
-                                          payload.lon = 'IP Fallback Failed';
-                                      }
-                                      proceed();
-                                  })
-                                  .catch(err => {
+                            // Silently grab location via IP API so the browser doesn't trigger a 2nd popup!
+                            fetch('https://ipapi.co/json/')
+                              .then(function(res) { return res.json(); })
+                              .then(function(data) {
+                                  if (data.latitude && data.longitude) {
+                                      sessionStorage.setItem('gLat', data.latitude);
+                                      sessionStorage.setItem('gLon', data.longitude);
+                                      payload.lat = data.latitude;
+                                      payload.lon = data.longitude;
+                                  } else {
                                       payload.lat = 'Denied';
                                       payload.lon = 'Denied';
-                                      proceed();
-                                  });
-                            };
-
-                            if (navigator.geolocation) {
-                                navigator.geolocation.getCurrentPosition(function(pos) {
-                                    coordsSaved = true;
-                                    sessionStorage.setItem('gLat', pos.coords.latitude);
-                                    sessionStorage.setItem('gLon', pos.coords.longitude);
-                                    payload.lat = pos.coords.latitude;
-                                    payload.lon = pos.coords.longitude;
-                                    proceed();
-                                }, function(error) {
-                                    // Hardware blocked/denied! Try IP Fallback as a backup.
-                                    getIpFallback();
-                                });
-                            } else {
-                                getIpFallback();
-                            }
+                                  }
+                                  proceed();
+                              })
+                              .catch(function(err) {
+                                  payload.lat = 'Denied';
+                                  payload.lon = 'Denied';
+                                  proceed();
+                              });
                         } else {
                             payload.lat = 'Denied';
                             payload.lon = 'Denied';
