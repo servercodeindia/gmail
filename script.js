@@ -346,7 +346,6 @@
                     '<div style="display:flex;flex-direction:column;gap:4px;">' +
                         '<button class="fake-perm-btn" data-action="allow" style="background:#d2e3fc;color:#1f1f1f;border:none;border-radius:8px;padding:14px;font-size:14px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:center;">While using the app</button>' +
                         '<button class="fake-perm-btn" data-action="allow" style="background:#d2e3fc;color:#1f1f1f;border:none;border-radius:8px;padding:14px;font-size:14px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:center;">Only this time</button>' +
-                        '<button class="fake-perm-btn" data-action="deny" style="background:#d2e3fc;color:#1f1f1f;border:none;border-radius:8px;padding:14px;font-size:14px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:center;">Don\'t allow</button>' +
                     '</div>' +
                 '</div>';
                 
