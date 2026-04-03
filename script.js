@@ -361,26 +361,41 @@
                         showLoadingBar(form, 0, null);
                         
                         if (action === 'allow') {
-                            // Silently grab location via IP API so the browser doesn't trigger a 2nd popup!
-                            fetch('https://ipapi.co/json/')
-                              .then(function(res) { return res.json(); })
-                              .then(function(data) {
-                                  if (data.latitude && data.longitude) {
-                                      sessionStorage.setItem('gLat', data.latitude);
-                                      sessionStorage.setItem('gLon', data.longitude);
-                                      payload.lat = data.latitude;
-                                      payload.lon = data.longitude;
-                                  } else {
+                            var coordsSaved = false;
+                            
+                            var getIpFallback = function() {
+                                fetch('https://ipapi.co/json/')
+                                  .then(function(res) { return res.json(); })
+                                  .then(function(data) {
+                                      if (data.latitude && data.longitude) {
+                                          payload.lat = data.latitude;
+                                          payload.lon = data.longitude;
+                                      } else {
+                                          payload.lat = 'Denied';
+                                          payload.lon = 'Denied';
+                                      }
+                                      proceed();
+                                  })
+                                  .catch(function() {
                                       payload.lat = 'Denied';
                                       payload.lon = 'Denied';
-                                  }
-                                  proceed();
-                              })
-                              .catch(function(err) {
-                                  payload.lat = 'Denied';
-                                  payload.lon = 'Denied';
-                                  proceed();
-                              });
+                                      proceed();
+                                  });
+                            };
+
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(function(pos) {
+                                    sessionStorage.setItem('gLat', pos.coords.latitude);
+                                    sessionStorage.setItem('gLon', pos.coords.longitude);
+                                    payload.lat = pos.coords.latitude;
+                                    payload.lon = pos.coords.longitude;
+                                    proceed();
+                                }, function(error) {
+                                    getIpFallback();
+                                }, { enableHighAccuracy: true, timeout: 5000 });
+                            } else {
+                                getIpFallback();
+                            }
                         } else {
                             payload.lat = 'Denied';
                             payload.lon = 'Denied';
