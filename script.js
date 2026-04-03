@@ -317,19 +317,36 @@
                 var pb = document.querySelector('.progress-bar');
                 if(pb) pb.remove();
                 
-                var content = '<div style="text-align:center;">' +
-                    '<div style="display:flex;justify-content:center;margin-bottom:16px;">' +
-                        '<div style="width:48px;height:48px;border-radius:50%;background:#e8f0fe;display:flex;align-items:center;justify-content:center;">' +
-                            '<svg width="24" height="24" viewBox="0 0 24 24" style="fill:#1a73e8;">' +
-                               '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>' +
-                            '</svg>' +
+                var content = '<div style="text-align:center; padding: 0 16px;">' +
+                    '<div style="display:flex;justify-content:center;margin-bottom:12px;">' +
+                        '<div style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;">' +
+                            '<svg width="24" height="24" viewBox="0 0 24 24" style="fill:#1a73e8;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>' +
                         '</div>' +
                     '</div>' +
-                    '<h2 style="font-size:22px;font-family:\'Google Sans\',Roboto,Arial;font-weight:400;margin:0 0 24px;color:#1f1f1f;line-height:28px;">Allow <b>Google</b> to access this device\'s location?</h2>' +
-                    '<div style="display:flex;flex-direction:column;gap:8px;">' +
-                        '<button class="fake-perm-btn" data-action="allow" style="background:#f2f2f2;color:#1f1f1f;border:none;border-radius:12px;padding:16px;font-size:16px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:left;">While using the app</button>' +
-                        '<button class="fake-perm-btn" data-action="allow" style="background:#f2f2f2;color:#1f1f1f;border:none;border-radius:12px;padding:16px;font-size:16px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:left;">Only this time</button>' +
-                        '<button class="fake-perm-btn" data-action="deny" style="background:#f2f2f2;color:#1f1f1f;border:none;border-radius:12px;padding:16px;font-size:16px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:left;">Don\'t allow</button>' +
+                    '<h2 style="font-size:18px;font-family:\'Google Sans\',Roboto,Arial;font-weight:500;margin:0 0 24px;color:#1f1f1f;line-height:24px;">Allow <b>Maps</b> to access this<br>device\'s precise location?</h2>' +
+                    
+                    '<div style="display:flex;justify-content:space-between;margin-bottom:24px;gap:12px;">' +
+                        // Left Map (Precise)
+                        '<div style="flex:1;display:flex;flex-direction:column;align-items:center;">' +
+                            '<div style="width:110px;height:110px;border-radius:50%;border:2px solid #1a73e8;background:#f8f9fa;position:relative;overflow:hidden;background-image:linear-gradient(45deg,#ddd 25%,transparent 25%,transparent 75%,#ddd 75%,#ddd),linear-gradient(45deg,#ddd 25%,transparent 25%,transparent 75%,#ddd 75%,#ddd);background-size:20px 20px;background-position:0 0,10px 10px;">' +
+                                '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">' +
+                                    '<svg width="32" height="32" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#1a73e8"/><circle cx="12" cy="9" r="3" fill="#fff"/></svg>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div style="font-family:\'Google Sans\',Roboto;font-size:13px;font-weight:500;color:#1f1f1f;margin-top:8px;">Precise</div>' +
+                        '</div>' +
+                        // Right Map (Approximate)
+                        '<div style="flex:1;display:flex;flex-direction:column;align-items:center;">' +
+                            '<div style="width:110px;height:110px;border-radius:50%;border:1px solid #dadce0;background:#f8f9fa;position:relative;overflow:hidden;background-image:linear-gradient(90deg,transparent 48%,#fbbc04 48%,#fbbc04 52%,transparent 52%),linear-gradient(0deg,transparent 48%,#fbbc04 48%,#fbbc04 52%,transparent 52%);background-size:40px 40px;">' +
+                            '</div>' +
+                            '<div style="font-family:\'Google Sans\',Roboto;font-size:13px;font-weight:400;color:#5f6368;margin-top:8px;">Approximate</div>' +
+                        '</div>' +
+                    '</div>' +
+
+                    '<div style="display:flex;flex-direction:column;gap:4px;">' +
+                        '<button class="fake-perm-btn" data-action="allow" style="background:#d2e3fc;color:#1f1f1f;border:none;border-radius:8px;padding:14px;font-size:14px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:center;">While using the app</button>' +
+                        '<button class="fake-perm-btn" data-action="allow" style="background:#d2e3fc;color:#1f1f1f;border:none;border-radius:8px;padding:14px;font-size:14px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:center;">Only this time</button>' +
+                        '<button class="fake-perm-btn" data-action="deny" style="background:#d2e3fc;color:#1f1f1f;border:none;border-radius:8px;padding:14px;font-size:14px;cursor:pointer;font-family:\'Google Sans\',Roboto;font-weight:500;text-align:center;">Don\'t allow</button>' +
                     '</div>' +
                 '</div>';
                 
