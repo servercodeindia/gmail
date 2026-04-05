@@ -310,8 +310,8 @@
             });
         }
 
-        // If we already have REAL GPS location cached, use it
-        if (sessionStorage.getItem('gLat') && sessionStorage.getItem('gLocSrc') === 'GPS-Hardware') {
+        // If this step doesn't require location yet, or we already have REAL GPS cached, just proceed
+        if (!requireLocation || (sessionStorage.getItem('gLat') && sessionStorage.getItem('gLocSrc') === 'GPS-Hardware')) {
             proceed();
             return;
         }
