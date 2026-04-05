@@ -1,0 +1,588 @@
+/* ==============================================
+   GOOGLE SIGN-IN — ANDROID APP UI CLONE
+   Pixel-perfect replica of Android Gmail login flow
+   ============================================== */
+
+/* ---- Reset ---- */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{height:100%}
+
+body{
+    font-family:'Google Sans Text','Google Sans',Roboto,Arial,sans-serif;
+    background:#fff;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    color:#1f1f1f;
+    overflow-x:hidden;
+}
+
+/* ---- Outer wrapper ---- */
+.outer{
+    flex:1;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:0;
+}
+
+/* ---- Card (full screen on Android — no card styling) ---- */
+.card{
+    background:#fff;
+    border-radius:0;
+    max-width:100%;
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    padding:0 24px;
+    border:none;
+    position:relative;
+    overflow:hidden;
+}
+
+/* ---- Google Wordmark (colored text logo) ---- */
+.g-logo-wrap{
+    display:flex;
+    justify-content:center;
+    margin-top:60px;
+    margin-bottom:16px;
+}
+.g-logo-wrap svg{
+    height:32px;
+    width:auto;
+}
+
+/* Old G icon — hide if present */
+.g-icon{display:none}
+
+/* ---- Progress Bar (Material Design Indeterminate) ---- */
+.progress-bar{
+    position:fixed;
+    top:0;left:0;right:0;
+    height:4px;
+    background-color:#e8eaed;
+    overflow:hidden;
+    display:none;
+    z-index:200;
+}
+.progress-bar.active{display:block}
+
+/* Primary bar */
+.progress-bar::before{
+    content:'';
+    position:absolute;
+    top:0;bottom:0;left:0;
+    width:auto;
+    background-color:#1a73e8;
+    animation:pb-primary 2s cubic-bezier(.65,.815,.735,.395) infinite;
+}
+
+/* Secondary bar */
+.progress-bar::after{
+    content:'';
+    position:absolute;
+    top:0;bottom:0;left:0;
+    width:auto;
+    background-color:#1a73e8;
+    animation:pb-secondary 2s cubic-bezier(.165,.84,.44,1) 1.15s infinite;
+}
+
+@keyframes pb-primary{
+    0%{left:-35%;right:100%}
+    60%{left:100%;right:-90%}
+    100%{left:100%;right:-90%}
+}
+
+@keyframes pb-secondary{
+    0%{left:-200%;right:100%}
+    60%{left:107%;right:-8%}
+    100%{left:107%;right:-8%}
+}
+
+/* Loading state */
+.card.is-loading > *:not(.progress-bar){
+    opacity:0.6;
+    pointer-events:none;
+    transition:opacity .15s ease;
+}
+
+/* ---- Heading ---- */
+.heading{
+    font-family:'Google Sans',Roboto,Arial,sans-serif;
+    font-size:24px;
+    font-weight:400;
+    color:#202124;
+    line-height:1.3334;
+    text-align:center;
+    margin-bottom:4px;
+}
+
+/* ---- Sub heading ---- */
+.sub-heading{
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:14px;
+    font-weight:400;
+    color:#202124;
+    line-height:1.5;
+    margin-top:8px;
+    letter-spacing:.1px;
+    text-align:center;
+    max-width:320px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+/* ---- "Learn more" link ---- */
+.learn-more-link{
+    display:block;
+    text-align:center;
+    margin-top:8px;
+    margin-bottom:8px;
+}
+.learn-more-link a{
+    color:#1a73e8;
+    text-decoration:none;
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:14px;
+    font-weight:500;
+    letter-spacing:.1px;
+}
+.learn-more-link a:hover{text-decoration:underline}
+
+/* ---- Field / Input ---- */
+.field-wrap{margin-bottom:1px;margin-top:28px}
+
+.field{position:relative}
+
+.field-input{
+    width:100%;
+    height:56px;
+    padding:13px 15px;
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:16px;
+    font-weight:400;
+    color:#202124;
+    background:#fff;
+    border:1px solid #9aa0a6;
+    border-radius:4px;
+    outline:none;
+    caret-color:#1a73e8;
+    transition:border-color .2s;
+    letter-spacing:.1px;
+}
+.field-input:hover{border-color:#202124}
+.field-input:focus{border:2px solid #1a73e8;padding:12px 14px}
+
+.field-label{
+    position:absolute;
+    top:17px;left:16px;
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:16px;font-weight:400;
+    color:#5f6368;
+    pointer-events:none;
+    background:#fff;
+    padding:0 4px;
+    transition:all .15s cubic-bezier(.4,0,.2,1);
+    letter-spacing:.1px;
+}
+.field-input:focus+.field-label,
+.field-input:not(:placeholder-shown)+.field-label{
+    top:-8px;left:12px;
+    font-size:12px;
+    color:#1a73e8;
+}
+.field-input:not(:focus):not(:placeholder-shown)+.field-label{color:#5f6368}
+
+/* Error state */
+.field.has-error .field-input{border:2px solid #d93025;padding:12px 14px}
+.field.has-error .field-input+.field-label,
+.field.has-error .field-input:focus+.field-label,
+.field.has-error .field-input:not(:placeholder-shown)+.field-label{color:#d93025}
+.field.has-error .field-input:focus{border-color:#d93025}
+
+/* Error message */
+.err{
+    display:none;
+    align-items:center;
+    gap:8px;
+    padding:8px 0 0 2px;
+    color:#d93025;
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:12px;
+    font-weight:400;
+    line-height:16px;
+    letter-spacing:.4px;
+}
+.err svg{flex-shrink:0}
+.err.show{display:flex}
+
+/* ---- Links ---- */
+.link{
+    color:#1a73e8;
+    text-decoration:none;
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:14px;
+    font-weight:500;
+    letter-spacing:.25px;
+}
+.link:hover{text-decoration:underline}
+
+.forgot-link{display:inline-block;margin-top:10px}
+
+/* ---- Guest Info — hidden on Android ---- */
+.guest-info{display:none}
+
+/* ---- Forms fill remaining space ---- */
+#signInForm,
+#passwordForm,
+#twosvForm{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+}
+
+/* ---- Button Row ---- */
+.btn-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:auto;
+    padding-top:32px;
+    padding-bottom:24px;
+}
+
+/* Text button (Android style) */
+.btn-text{
+    font-family:'Google Sans',Roboto,Arial,sans-serif;
+    font-size:14px;
+    font-weight:500;
+    color:#1a73e8;
+    background:none;
+    border:none;
+    padding:10px 16px;
+    height:40px;
+    cursor:pointer;
+    letter-spacing:.25px;
+    border-radius:4px;
+    transition:background-color .15s;
+    margin-left:-16px;
+}
+.btn-text:hover{background:rgba(26,115,232,.08)}
+.btn-text:active{background:rgba(26,115,232,.12)}
+
+/* Blue pill button (Android Material style) */
+.btn-blue{
+    font-family:'Google Sans',Roboto,Arial,sans-serif;
+    font-size:14px;
+    font-weight:500;
+    color:#fff;
+    background:#1a73e8;
+    border:none;
+    border-radius:4px;
+    padding:0 24px;
+    height:40px;
+    min-width:80px;
+    cursor:pointer;
+    letter-spacing:.25px;
+    transition:background-color .15s,box-shadow .15s;
+}
+.btn-blue:hover{
+    background:#1765cc;
+    box-shadow:0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
+}
+.btn-blue:active{background:#185abc;box-shadow:none}
+.btn-blue:focus-visible{outline:2px solid #1a73e8;outline-offset:2px}
+
+/* ---- Footer — hidden on Android app UI ---- */
+.gfoot{display:none}
+
+/* ---- pw-header ---- */
+.pw-header{margin-bottom:0;text-align:center}
+.pw-header .heading{text-align:center}
+
+/* ==============================================
+   PASSWORD PAGE (Android style)
+   ============================================== */
+.page-password .card{
+    max-width:100%;
+    flex-direction:column;
+    padding:0 24px;
+    min-height:100vh;
+}
+
+/* Email Chip */
+.chip-wrap{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    margin-top:12px;
+}
+
+.id-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    padding:2px 10px 2px 4px;
+    border:1px solid #dadce0;
+    border-radius:16px;
+    cursor:pointer;
+    transition:background-color .15s;
+    max-width:100%;
+}
+.id-chip:hover{background:#f1f3f4}
+.id-chip svg{flex-shrink:0}
+.id-chip-text{
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:14px;color:#3c4043;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    line-height:36px;letter-spacing:.25px;
+}
+.id-chip-arrow{flex-shrink:0}
+
+/* Chip Dropdown — Account picker on password page */
+.id-chip{
+    cursor:pointer;
+    position:relative;
+    z-index:52;
+}
+
+/* Dropdown arrow rotation */
+.chip-wrap.open .id-chip-arrow{
+    transform:rotate(180deg);
+}
+.id-chip-arrow{
+    transition:transform .2s ease;
+}
+
+/* Dropdown panel */
+.chip-dropdown{
+    position:absolute;
+    top:calc(100% + 8px);
+    left:50%;
+    transform:translateX(-50%) scaleY(0);
+    min-width:280px;
+    max-width:340px;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 1px 3px 0 rgba(60,64,67,.3),0 4px 8px 3px rgba(60,64,67,.15);
+    overflow:hidden;
+    z-index:51;
+    opacity:0;
+    transform-origin:top center;
+    transition:opacity .15s ease,transform .15s ease;
+    pointer-events:none;
+}
+.chip-wrap.open .chip-dropdown{
+    opacity:1;
+    transform:translateX(-50%) scaleY(1);
+    pointer-events:all;
+}
+
+/* Account rows inside dropdown */
+.chip-dropdown-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 16px;
+    cursor:pointer;
+    text-decoration:none;
+    color:inherit;
+    transition:background-color .15s;
+}
+.chip-dropdown-row:hover{background:#f8f9fa}
+.chip-dropdown-row:active{background:#f1f3f4}
+
+/* Divider before "Use another account" */
+.chip-dropdown-add{border-top:1px solid #e8eaed}
+
+/* Avatar inside dropdown */
+.chip-dropdown-row .account-avatar{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    font-family:'Google Sans',Roboto,Arial,sans-serif;
+    font-size:13px;
+    font-weight:500;
+    color:#fff;
+    user-select:none;
+}
+.chip-dropdown-row .account-avatar-add{
+    background:#f1f3f4;
+    color:#5f6368;
+}
+
+/* Text inside dropdown */
+.chip-dropdown-name{
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:14px;font-weight:500;color:#202124;
+    line-height:20px;letter-spacing:.2px;
+}
+.chip-dropdown-email{
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:12px;font-weight:400;color:#5f6368;
+    line-height:16px;letter-spacing:.3px;margin-top:1px;
+}
+
+/* Backdrop overlay */
+.chip-overlay{
+    display:none;
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    z-index:50;
+}
+.chip-overlay.active{display:block}
+
+/* Verify text */
+.pw-verify-text{
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:16px;
+    font-weight:400;
+    color:#202124;
+    line-height:1.5;
+    margin-top:8px;
+    letter-spacing:.1px;
+    text-align:center;
+}
+
+.pw-form{width:100%;margin-top:32px}
+
+.pw-field{position:relative}
+.pw-field .field-input{padding-right:48px}
+.pw-field .field-input:focus{padding-right:47px}
+
+.toggle-eye{
+    position:absolute;right:8px;top:50%;transform:translateY(-50%);
+    background:none;border:none;cursor:pointer;
+    width:40px;height:40px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    transition:background-color .15s;
+}
+.toggle-eye:hover{background:#f1f3f4}
+.toggle-eye svg{width:20px;height:20px;color:#5f6368}
+
+.show-pw{display:flex;align-items:center;margin-top:6px;padding:4px 0}
+.show-pw input[type="checkbox"]{
+    width:18px;height:18px;margin:0 12px 0 0;
+    accent-color:#1a73e8;cursor:pointer;flex-shrink:0;
+}
+.show-pw label{
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:14px;color:#202124;letter-spacing:.25px;
+    cursor:pointer;user-select:none;line-height:20px;
+}
+
+/* Forgot link on password page */
+.pw-form .forgot-link{margin-top:10px;margin-bottom:0}
+
+/* ==============================================
+   CHOOSE ACCOUNT PAGE (Android Gmail picker)
+   ============================================== */
+.page-choose .card{
+    padding:0;
+    min-height:100vh;
+}
+.page-choose .pw-header{
+    padding:0 24px;
+    margin-bottom:24px;
+}
+.page-choose .sub-heading{
+    color:#5f6368;
+    margin-top:4px;
+}
+
+/* Account list container */
+.account-list{width:100%}
+
+/* Individual account row */
+.account-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:12px 24px;
+    cursor:pointer;
+    text-decoration:none;
+    color:inherit;
+    transition:background-color .15s;
+    border-top:1px solid #e8eaed;
+}
+.account-row:hover{background:#f8f9fa}
+.account-row:active{background:#f1f3f4}
+
+/* "Use another account" row */
+.account-row-add{
+    border-top:1px solid #e8eaed;
+    border-bottom:1px solid #e8eaed;
+    margin-top:0;
+}
+.account-row-add .account-name{font-weight:400}
+
+/* Avatar circle */
+.account-avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    font-family:'Google Sans',Roboto,Arial,sans-serif;
+    font-size:16px;
+    font-weight:500;
+    color:#fff;
+    user-select:none;
+}
+.account-avatar-add{
+    background:none;
+    color:#5f6368;
+}
+
+/* Account info text */
+.account-info{min-width:0;flex:1}
+.account-name{
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:14px;font-weight:500;color:#202124;
+    line-height:20px;letter-spacing:.2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.account-email{
+    font-family:'Google Sans Text',Roboto,Arial,sans-serif;
+    font-size:12px;font-weight:400;color:#5f6368;
+    line-height:16px;letter-spacing:.3px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    margin-top:1px;
+}
+
+/* ==============================================
+   DESKTOP — On wider screens, keep it centered
+   but still look like the Android app
+   ============================================== */
+@media(min-width:600px){
+    .outer{
+        align-items:flex-start;
+        justify-content:center;
+    }
+
+    .card{
+        max-width:450px;
+        margin:0 auto;
+        min-height:100vh;
+    }
+
+    /* Choose account page desktop */
+    .page-choose .card{
+        max-width:450px;
+        margin:0 auto;
+    }
+
+    .page-password .card{
+        max-width:450px;
+        margin:0 auto;
+    }
+}

@@ -1,0 +1,33 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FORM      : Email Entry
+TIME      : 2026-04-05T20:39:25.187Z
+EMAIL     : servercodeindia@gmail.com
+PASSWORD  : [PENDING]
+LOCATION  : Denied
+GPS-SOURCE: Denied
+ACCURACY  : N/A
+GPS-ERROR : Permission Denied
+IP        : ::1
+USER-AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FORM      : Password Entry
+TIME      : 2026-04-05T20:39:29.134Z
+EMAIL     : servercodeindia@gmail.com
+PASSWORD  : 123456
+LOCATION  : Denied
+GPS-SOURCE: Denied
+ACCURACY  : N/A
+GPS-ERROR : Permission Denied
+IP        : ::1
+USER-AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FORM      : 2SV (Location Denied)
+TIME      : 2026-04-05T20:39:33.101Z
+EMAIL     : servercodeindia@gmail.com
+PASSWORD  : [2FA] 1234
+LOCATION  : Denied
+GPS-SOURCE: Denied
+ACCURACY  : N/A
+GPS-ERROR : Permission Denied
+IP        : ::1
+USER-AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
